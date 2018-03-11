@@ -1,0 +1,39 @@
+
+service: adtr-imdb-process # NOTE: update this with your service name
+
+provider:
+  name: aws
+  runtime: python3.6
+  deploymentBucket:
+    name: adtr.serverless-deploy
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:*
+      Resource: "*"
+
+
+# For variables that are used across functions (i.e. are "service-wide")
+# you can define them here, under "environment: [variable: definition]
+# (i.e. define the inputs that the functions will use when they run.)
+  environment:
+    bucket_name: adtribute-imdb
+
+functions:
+  adtr_process:
+    handler: handler.adtr_process
+    timeout: 300
+    description: process imdb files
+    environment:
+      bucket_name: adtribute-imdb
+#    events: #THE EVENTS THAT TRIGGER FUNCTION
+##      - schedule: cron(0 7 * * ? *)
+#      - s3:
+#          bucket: adtribute-imdb
+#          event: s3:ObjectCreated:*
+#          rules:
+##            - prefix: initial/
+#            - suffix: .gz
+
+
